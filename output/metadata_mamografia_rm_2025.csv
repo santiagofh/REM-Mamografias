@@ -1,0 +1,10 @@
+﻿campo,valor
+anio,2025
+region,13 - Region Metropolitana
+numerador,"REM-P12, Seccion B1, Col01, codigos P1220030/P1207030/P1207040/P1207050"
+denominador,"PIV mujeres 50-69, inscritos 2024, base de pago 2025"
+alias_piv_aplicado,"311001 -> 201674, Cesfam El Abrazo Dr. Salvador Allende"
+corte_principal,Mes 12 del REM-P12 2025
+formula,numerador_mujeres_50_69 / denominador_piv_mujeres_50_69 * 100
+uso_recomendado,Usar cobertura comunal como salida principal; la cobertura por establecimiento es referencial/control.
+nota,"No se usa REM-A29 porque registra examenes/procedimientos, no personas unicas con vigencia."
