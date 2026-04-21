@@ -1,0 +1,114 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="350" viewBox="0 0 900 350" role="img" aria-label="REM-P12 seccion B1 mujeres con mamografia vigente">
+  <rect width="900" height="350" fill="#ffffff"/>
+  <text x="135" y="18" font-family="Arial, sans-serif" font-size="15" font-weight="700">SECCION B: PROGRAMA DE CANCER DE MAMA</text>
+  <text x="135" y="40" font-family="Arial, sans-serif" font-size="15" font-weight="700">SECCION B1: MUJERES CON MAMOGRAFIA VIGENTE EN LOS ULTIMOS 2 ANOS.</text>
+
+  <g font-family="Arial, sans-serif" font-size="13">
+    <rect x="130" y="45" width="760" height="275" fill="#ffffff" stroke="#222" stroke-width="1"/>
+    <line x1="305" y1="45" x2="305" y2="320" stroke="#222" stroke-width="1"/>
+    <line x1="455" y1="45" x2="455" y2="320" stroke="#222" stroke-width="1"/>
+    <line x1="610" y1="45" x2="610" y2="320" stroke="#222" stroke-width="1"/>
+    <line x1="760" y1="45" x2="760" y2="320" stroke="#222" stroke-width="1"/>
+    <line x1="130" y1="105" x2="890" y2="105" stroke="#222" stroke-width="1"/>
+
+    <rect x="305" y="105" width="150" height="160" fill="#fff6a5"/>
+    <rect x="455" y="105" width="155" height="160" fill="#fff6a5"/>
+    <rect x="610" y="105" width="150" height="160" fill="#fff6a5"/>
+    <rect x="760" y="105" width="130" height="160" fill="#fff6a5"/>
+
+    <rect x="0" y="148" width="455" height="25" fill="#ffff00"/>
+    <rect x="0" y="173" width="455" height="25" fill="#ffff00"/>
+    <rect x="0" y="198" width="455" height="25" fill="#ffff00"/>
+    <rect x="0" y="223" width="455" height="25" fill="#ffff00"/>
+
+    <text x="190" y="70" text-anchor="middle">GRUPO DE EDAD</text>
+    <text x="190" y="88" text-anchor="middle">(en anos)</text>
+    <text x="380" y="68" text-anchor="middle">Mujeres con Mamografia</text>
+    <text x="380" y="86" text-anchor="middle">vigente (Menor o igual a</text>
+    <text x="380" y="101" text-anchor="middle">2 anos)</text>
+    <text x="532" y="68" text-anchor="middle">Trans masculino</text>
+    <text x="532" y="86" text-anchor="middle">con Mamografia vigente</text>
+    <text x="532" y="101" text-anchor="middle">(Menor o igual a 2 anos)</text>
+    <text x="685" y="80" text-anchor="middle" fill="#ff0000">Pueblos Originarios</text>
+    <text x="825" y="80" text-anchor="middle" fill="#ff0000">Migrantes</text>
+
+    <g stroke="#777" stroke-width="1" stroke-dasharray="1 2">
+      <line x1="130" y1="130" x2="890" y2="130"/>
+      <line x1="130" y1="155" x2="890" y2="155"/>
+      <line x1="130" y1="180" x2="890" y2="180"/>
+      <line x1="130" y1="205" x2="890" y2="205"/>
+      <line x1="130" y1="230" x2="890" y2="230"/>
+      <line x1="130" y1="255" x2="890" y2="255"/>
+      <line x1="130" y1="280" x2="890" y2="280"/>
+      <line x1="130" y1="305" x2="890" y2="305"/>
+    </g>
+
+    <g fill="#006edb" font-size="16">
+      <text x="28" y="122">P1207190</text>
+      <text x="28" y="147">P1220020</text>
+      <text x="28" y="172">P1220030</text>
+      <text x="28" y="197">P1207030</text>
+      <text x="28" y="222">P1207040</text>
+      <text x="28" y="247">P1207050</text>
+      <text x="28" y="272">P1207060</text>
+      <text x="28" y="297">P1207070</text>
+      <text x="28" y="322">P1207080</text>
+    </g>
+
+    <g font-size="13">
+      <text x="132" y="122">Menor de 35 anos</text>
+      <text x="132" y="147">35 a 49 anos</text>
+      <text x="132" y="172">50 a 54 anos</text>
+      <text x="132" y="197">55 a 59 anos</text>
+      <text x="132" y="222">60 a 64 anos</text>
+      <text x="132" y="247">65 a 69 anos</text>
+      <text x="132" y="272">70 a 74 anos</text>
+      <text x="132" y="297">75 a 79 anos</text>
+      <text x="132" y="322">80 y mas anos</text>
+    </g>
+
+    <g text-anchor="end" font-size="12">
+      <text x="453" y="122">COL01</text>
+      <text x="453" y="147">COL01</text>
+      <text x="453" y="172">COL01</text>
+      <text x="453" y="197">COL01</text>
+      <text x="453" y="222">COL01</text>
+      <text x="453" y="247">COL01</text>
+      <text x="453" y="272">COL01</text>
+      <text x="453" y="297">COL01</text>
+      <text x="453" y="322">COL01</text>
+
+      <text x="608" y="122">COL02</text>
+      <text x="608" y="147">COL02</text>
+      <text x="608" y="172">COL02</text>
+      <text x="608" y="197">COL02</text>
+      <text x="608" y="222">COL02</text>
+      <text x="608" y="247">COL02</text>
+      <text x="608" y="272">COL02</text>
+      <text x="608" y="297">COL02</text>
+      <text x="608" y="322">COL02</text>
+
+      <text x="758" y="122">COL03</text>
+      <text x="758" y="147">COL03</text>
+      <text x="758" y="172">COL03</text>
+      <text x="758" y="197">COL03</text>
+      <text x="758" y="222">COL03</text>
+      <text x="758" y="247">COL03</text>
+      <text x="758" y="272">COL03</text>
+      <text x="758" y="297">COL03</text>
+      <text x="758" y="322">COL03</text>
+
+      <text x="888" y="122">COL04</text>
+      <text x="888" y="147">COL04</text>
+      <text x="888" y="172">COL04</text>
+      <text x="888" y="197">COL04</text>
+      <text x="888" y="222">COL04</text>
+      <text x="888" y="247">COL04</text>
+      <text x="888" y="272">COL04</text>
+      <text x="888" y="297">COL04</text>
+      <text x="888" y="322">COL04</text>
+    </g>
+
+    <text x="132" y="342" font-size="13">(*) Fuente de informacion: Tarjetero poblacional de la APS</text>
+  </g>
+</svg>

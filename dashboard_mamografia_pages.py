@@ -567,6 +567,7 @@ def render_detail_page() -> None:
 
 def render_quality_page() -> None:
     metadata = load_metadata()
+    rem_section_image = BASE_DIR / "assets" / "rem_p12_b1_mamografia.svg"
 
     st.title("Control y metodología")
     render_provisional_badge()
@@ -581,6 +582,13 @@ def render_quality_page() -> None:
         """,
         unsafe_allow_html=True,
     )
+
+    if rem_section_image.exists():
+        st.markdown("### Sección REM utilizada")
+        st.image(
+            str(rem_section_image),
+            caption="REM-P12, sección B1: mujeres con mamografía vigente en los últimos 2 años.",
+        )
 
     render_metadata_markdown(metadata)
 
