@@ -396,7 +396,9 @@ def render_metadata_markdown(metadata: pd.DataFrame) -> None:
 
 **Fórmula:** `{values.get("formula", "No disponible")}`
 
-**Criterio comunal:** todo establecimiento con numerador REM-P12 aporta al numerador de su comuna. Si no tiene población inscrita y validada directa, queda en revisión solo para su cálculo propio.
+### Criterio de inclusión comunal
+
+Los establecimientos con numerador REM-P12 se suman al numerador de su comuna. Si un establecimiento no tiene población inscrita y validada directa, queda en revisión metodológica solo para su cálculo propio; no se excluye de la cobertura comunal.
 
 **Uso recomendado:** {values.get("uso_recomendado", "No disponible")}
 
@@ -572,16 +574,6 @@ def render_quality_page() -> None:
     st.title("Control y metodología")
     render_provisional_badge()
     st.caption("Trazabilidad metodológica del cálculo.")
-
-    st.markdown(
-        """
-        <div class="info-card">
-            <div class="info-card-title">Criterio de inclusión comunal</div>
-            <p class="soft-note">Los establecimientos con numerador REM-P12 se suman al numerador de su comuna. Si un establecimiento no tiene población inscrita y validada directa, queda en revisión metodológica solo para su cálculo propio; no se excluye de la cobertura comunal.</p>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
 
     if rem_section_image.exists():
         st.markdown("### Sección REM utilizada")
