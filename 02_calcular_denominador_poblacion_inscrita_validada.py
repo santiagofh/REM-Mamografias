@@ -9,7 +9,12 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parent
 OUTPUT = ROOT / "output"
 
-PIV = Path(os.environ.get("PIV_MAMOGRAFIA_PATH", ROOT / "data" / "T8009_Inscritos_RM.xlsx"))
+POBLACION_INSCRITA_VALIDADA = Path(
+    os.environ.get(
+        "POBLACION_INSCRITA_VALIDADA_PATH",
+        ROOT / "data" / "T8009_Inscritos_RM.xlsx",
+    )
+)
 ESTABLECIMIENTOS = Path(
     os.environ.get(
         "MAESTRO_ESTABLECIMIENTOS_PATH",
@@ -17,9 +22,10 @@ ESTABLECIMIENTOS = Path(
     )
 )
 
-# Alias observado entre la PIV FONASA 2024/base pago 2025 y el maestro REM.
-# La PIV codifica este CESFAM como 311001, pero REM/DEIS lo registra como 201674.
-PIV_CODE_ALIASES = {
+# Alias observado entre la población inscrita y validada FONASA 2024/base pago
+# 2025 y el maestro REM. FONASA codifica este CESFAM como 311001, pero
+# REM/DEIS lo registra como 201674.
+DENOMINATOR_CODE_ALIASES = {
     "311001": "201674",
 }
 
@@ -67,42 +73,42 @@ def load_establecimientos() -> pd.DataFrame:
 def main() -> None:
     OUTPUT.mkdir(parents=True, exist_ok=True)
 
-    piv = pd.read_excel(PIV, sheet_name="Respuesta", header=3)
-    piv = piv.rename(
+    inscritos = pd.read_excel(POBLACION_INSCRITA_VALIDADA, sheet_name="Respuesta", header=3)
+    inscritos = inscritos.rename(
         columns={
-            "Servicio de Salud": "servicio_salud_piv",
-            "Dependencia": "dependencia_piv",
-            "Comuna": "comuna_piv",
+            "Servicio de Salud": "servicio_salud_denominador",
+            "Dependencia": "dependencia_denominador",
+            "Comuna": "comuna_denominador",
             "Código Centro": "IdEstablecimiento",
-            "Nombre Centro": "establecimiento_piv",
+            "Nombre Centro": "establecimiento_denominador",
             "Nacionalidad": "nacionalidad",
             "Sexo": "sexo",
             "Edad": "edad",
             "Inscritos": "inscritos",
         }
     )
-    piv["IdEstablecimiento_piv_original"] = code_text(piv["IdEstablecimiento"])
-    piv["IdEstablecimiento"] = piv["IdEstablecimiento_piv_original"].replace(PIV_CODE_ALIASES)
-    piv["edad"] = pd.to_numeric(piv["edad"], errors="coerce")
-    piv["inscritos"] = to_int_series(piv["inscritos"])
+    inscritos["IdEstablecimiento_denominador_original"] = code_text(inscritos["IdEstablecimiento"])
+    inscritos["IdEstablecimiento"] = inscritos["IdEstablecimiento_denominador_original"].replace(DENOMINATOR_CODE_ALIASES)
+    inscritos["edad"] = pd.to_numeric(inscritos["edad"], errors="coerce")
+    inscritos["inscritos"] = to_int_series(inscritos["inscritos"])
 
-    piv = piv[
-        piv["sexo"].astype(str).str.strip().eq("Mujeres")
-        & piv["edad"].between(50, 69, inclusive="both")
+    inscritos = inscritos[
+        inscritos["sexo"].astype(str).str.strip().eq("Mujeres")
+        & inscritos["edad"].between(50, 69, inclusive="both")
     ].copy()
 
     group_cols = [
         "IdEstablecimiento",
-        "IdEstablecimiento_piv_original",
-        "servicio_salud_piv",
-        "dependencia_piv",
-        "comuna_piv",
-        "establecimiento_piv",
+        "IdEstablecimiento_denominador_original",
+        "servicio_salud_denominador",
+        "dependencia_denominador",
+        "comuna_denominador",
+        "establecimiento_denominador",
     ]
     denom = (
-        piv.groupby(group_cols, dropna=False, as_index=False)["inscritos"]
+        inscritos.groupby(group_cols, dropna=False, as_index=False)["inscritos"]
         .sum()
-        .rename(columns={"inscritos": "denominador_piv_mujeres_50_69"})
+        .rename(columns={"inscritos": "denominador_poblacion_inscrita_validada_mujeres_50_69"})
     )
 
     estab = load_establecimientos()
@@ -140,13 +146,13 @@ def main() -> None:
         }
     )
 
-    output_path = OUTPUT / "denominador_piv_mujeres_50_69_rm_base_pago_2025.csv"
+    output_path = OUTPUT / "denominador_poblacion_inscrita_validada_mujeres_50_69_rm_base_pago_2025.csv"
     denom.to_csv(output_path, index=False, encoding="utf-8-sig")
 
     sin_master = denom["IdComuna_master"].isna().sum()
     print(f"Denominador: {output_path}")
     print(f"Establecimientos con denominador: {len(denom):,}")
-    print(f"Denominador RM mujeres 50-69: {denom['denominador_piv_mujeres_50_69'].sum():,}")
+    print(f"Denominador RM mujeres 50-69: {denom['denominador_poblacion_inscrita_validada_mujeres_50_69'].sum():,}")
     print(f"Registros sin match en maestro: {sin_master:,}")
 
 

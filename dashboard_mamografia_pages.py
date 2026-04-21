@@ -54,7 +54,7 @@ def load_communes() -> pd.DataFrame:
         "IdComuna",
         "comuna_master",
         "numerador_mujeres_50_69",
-        "denominador_piv_mujeres_50_69",
+        "denominador_poblacion_inscrita_validada_mujeres_50_69",
         "cobertura_mamografia_pct",
     }
     missing = required.difference(df.columns)
@@ -67,7 +67,7 @@ def load_communes() -> pd.DataFrame:
             "Ano": "Año",
             "comuna_master": "Comuna",
             "numerador_mujeres_50_69": "Numerador",
-            "denominador_piv_mujeres_50_69": "Denominador",
+            "denominador_poblacion_inscrita_validada_mujeres_50_69": "Denominador",
             "cobertura_mamografia_pct": "Cobertura",
         }
     ).copy()
@@ -94,7 +94,7 @@ def load_establishments() -> pd.DataFrame:
         "comuna_master",
         "servicio_salud_master",
         "numerador_mujeres_50_69",
-        "denominador_piv_mujeres_50_69",
+        "denominador_poblacion_inscrita_validada_mujeres_50_69",
         "cobertura_mamografia_pct",
         "denominador_disponible",
         "50_54",
@@ -114,7 +114,7 @@ def load_establishments() -> pd.DataFrame:
             "tipo_establecimiento_master": "Tipo establecimiento",
             "servicio_salud_master": "Servicio de salud",
             "numerador_mujeres_50_69": "Numerador",
-            "denominador_piv_mujeres_50_69": "Denominador",
+            "denominador_poblacion_inscrita_validada_mujeres_50_69": "Denominador",
             "cobertura_mamografia_pct": "Cobertura",
             "denominador_disponible": "Denominador disponible",
         }
@@ -212,7 +212,7 @@ def build_commune_table(communes: pd.DataFrame) -> pd.DataFrame:
     ].rename(
         columns={
             "Cobertura": "Cobertura (%)",
-            "Denominador": "PIV mujeres 50-69",
+            "Denominador": "Población inscrita y validada mujeres 50-69",
             "Numerador": "Mujeres con mamografía vigente",
         }
     )
@@ -234,7 +234,7 @@ def build_establishment_table(establishments: pd.DataFrame) -> pd.DataFrame:
     ].rename(
         columns={
             "Cobertura": "Cobertura (%)",
-            "Denominador": "PIV mujeres 50-69",
+            "Denominador": "Población inscrita y validada mujeres 50-69",
             "Numerador": "Mujeres con mamografía vigente",
         }
     )
@@ -396,7 +396,7 @@ def render_metadata_markdown(metadata: pd.DataFrame) -> None:
 
 **Fórmula:** `{values.get("formula", "No disponible")}`
 
-**Criterio comunal:** todo establecimiento con numerador REM-P12 aporta al numerador de su comuna. Si no tiene PIV directa, queda en revisión solo para su cálculo propio.
+**Criterio comunal:** todo establecimiento con numerador REM-P12 aporta al numerador de su comuna. Si no tiene población inscrita y validada directa, queda en revisión solo para su cálculo propio.
 
 **Uso recomendado:** {values.get("uso_recomendado", "No disponible")}
 
@@ -411,8 +411,8 @@ def render_method_card() -> None:
         <div class="info-card">
             <div class="info-card-title">Lectura del indicador</div>
             <p class="soft-note"><strong>Numerador:</strong> mujeres de 50 a 69 años con mamografía vigente informadas en REM-P12 B1, Col01, corte diciembre 2025.</p>
-            <p class="soft-note"><strong>Denominador:</strong> PIV FONASA mujeres de 50 a 69 años, inscritos 2024 base de pago 2025.</p>
-            <p class="soft-note"><strong>Regla comunal:</strong> todo establecimiento con numerador aporta a la cobertura de su comuna, aunque no tenga PIV directa para calcular cobertura propia.</p>
+            <p class="soft-note"><strong>Denominador:</strong> población inscrita y validada FONASA mujeres de 50 a 69 años, inscritos 2024 base de pago 2025.</p>
+            <p class="soft-note"><strong>Regla comunal:</strong> todo establecimiento con numerador aporta a la cobertura de su comuna, aunque no tenga población inscrita y validada directa para calcular cobertura propia.</p>
             <p class="soft-note"><strong>Uso recomendado:</strong> cobertura comunal como salida principal; establecimiento como apoyo referencial y control.</p>
         </div>
         """,
@@ -441,7 +441,7 @@ def render_home_page() -> None:
             "Ranking": st.column_config.NumberColumn(format="%d", width="small"),
             "Comuna": st.column_config.TextColumn(width="medium"),
             "Cobertura (%)": st.column_config.NumberColumn(format="%.2f%%"),
-            "PIV mujeres 50-69": st.column_config.NumberColumn(format="%d"),
+            "Población inscrita y validada mujeres 50-69": st.column_config.NumberColumn(format="%d"),
             "Mujeres con mamografía vigente": st.column_config.NumberColumn(format="%d"),
         },
     )
@@ -449,7 +449,7 @@ def render_home_page() -> None:
     col1, col2, col3 = st.columns(3)
     col1.metric("Cobertura regional", format_pct(summary["coverage"]))
     col2.metric("Mujeres con mamografía vigente", format_int(summary["numerator"]))
-    col3.metric("PIV mujeres 50-69", format_int(summary["denominator"]))
+    col3.metric("Población inscrita y validada mujeres 50-69", format_int(summary["denominator"]))
 
     st.markdown("### Cobertura comunal")
     st.plotly_chart(build_commune_bar_chart(communes, summary["coverage"]), width="stretch")
@@ -468,7 +468,7 @@ def render_home_page() -> None:
                 <p class="soft-note"><strong>Mayor cobertura:</strong> {top_row["Comuna"]} ({format_pct(top_row["Cobertura"])}).</p>
                 <p class="soft-note"><strong>Menor cobertura:</strong> {bottom_row["Comuna"]} ({format_pct(bottom_row["Cobertura"])}).</p>
                 <p class="soft-note"><strong>Establecimientos en análisis:</strong> {format_int(len(establishments))} registros.</p>
-                <p class="soft-note"><strong>Controles pendientes:</strong> {format_int(len(control))} registros sin PIV directa, incluidos en el numerador comunal.</p>
+                <p class="soft-note"><strong>Controles pendientes:</strong> {format_int(len(control))} registros sin población inscrita y validada directa, incluidos en el numerador comunal.</p>
             </div>
             """,
             unsafe_allow_html=True,
@@ -482,7 +482,7 @@ def render_home_page() -> None:
                 [
                     {"Indicador": "Cobertura regional", "Valor": round(summary["coverage"], 2)},
                     {"Indicador": "Mujeres con mamografía vigente", "Valor": int(round(summary["numerator"]))},
-                    {"Indicador": "PIV mujeres 50-69", "Valor": int(round(summary["denominator"]))},
+                    {"Indicador": "Población inscrita y validada mujeres 50-69", "Valor": int(round(summary["denominator"]))},
                     {"Indicador": "Comunas sobre cobertura regional", "Valor": int(summary["above_regional"])},
                 ]
             )
@@ -517,7 +517,7 @@ def render_detail_page() -> None:
     metric1, metric2, metric3, metric4 = st.columns(4)
     metric1.metric("Cobertura comunal", format_pct(commune_row["Cobertura"]))
     metric2.metric("Mujeres con mamografía vigente", format_int(commune_row["Numerador"]))
-    metric3.metric("PIV mujeres 50-69", format_int(commune_row["Denominador"]))
+    metric3.metric("Población inscrita y validada mujeres 50-69", format_int(commune_row["Denominador"]))
     metric4.metric("Establecimientos", format_int(len(commune_establishments)))
 
     st.markdown("### Establecimientos")
@@ -533,7 +533,7 @@ def render_detail_page() -> None:
             "Tipo establecimiento": st.column_config.TextColumn(width="medium"),
             "Servicio de salud": st.column_config.TextColumn(width="medium"),
             "Cobertura (%)": st.column_config.NumberColumn(format="%.2f%%"),
-            "PIV mujeres 50-69": st.column_config.NumberColumn(format="%d"),
+            "Población inscrita y validada mujeres 50-69": st.column_config.NumberColumn(format="%d"),
             "Mujeres con mamografía vigente": st.column_config.NumberColumn(format="%d"),
             "Denominador disponible": st.column_config.CheckboxColumn(width="small"),
         },
@@ -552,7 +552,7 @@ def render_detail_page() -> None:
                     {"Indicador": "Comuna", "Valor": selected_commune},
                     {"Indicador": "Cobertura comunal", "Valor": round(float(commune_row["Cobertura"]), 2)},
                     {"Indicador": "Mujeres con mamografía vigente", "Valor": int(round(commune_row["Numerador"]))},
-                    {"Indicador": "PIV mujeres 50-69", "Valor": int(round(commune_row["Denominador"]))},
+                    {"Indicador": "Población inscrita y validada mujeres 50-69", "Valor": int(round(commune_row["Denominador"]))},
                 ]
             )
         },
@@ -576,7 +576,7 @@ def render_quality_page() -> None:
         """
         <div class="info-card">
             <div class="info-card-title">Criterio de inclusión comunal</div>
-            <p class="soft-note">Los establecimientos con numerador REM-P12 se suman al numerador de su comuna. Si un establecimiento no tiene PIV directa, queda en revisión metodológica solo para su cálculo propio; no se excluye de la cobertura comunal.</p>
+            <p class="soft-note">Los establecimientos con numerador REM-P12 se suman al numerador de su comuna. Si un establecimiento no tiene población inscrita y validada directa, queda en revisión metodológica solo para su cálculo propio; no se excluye de la cobertura comunal.</p>
         </div>
         """,
         unsafe_allow_html=True,

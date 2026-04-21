@@ -11,7 +11,7 @@ Formula:
 ```text
 Cobertura (%) =
   Mujeres de 50 a 69 anos con Mamografia Vigente
-  / Poblacion Inscrita Validada (PIV) de mujeres de 50 a 69 anos
+  / poblacion inscrita y validada de mujeres de 50 a 69 anos
   * 100
 ```
 
@@ -19,7 +19,7 @@ Componentes de la formula:
 
 1. Numerador: se extrae de la Serie P12, Seccion B.1. Se considera vigente si el examen se realizo en los ultimos 2 anos, segun estandar ministerial para metas sanitarias, o 3 anos segun periodicidad preventiva general. Para metas de gestion IAAPS suele usarse el corte de 23 meses. Incluye mamografias realizadas en CESFAM, hospitales de la red o clinicas privadas, siempre que el resultado haya sido entregado y registrado en ficha.
 
-2. Denominador: se utiliza la Poblacion Inscrita Validada (PIV) por FONASA en el establecimiento o comuna. El grupo prioritario para el indicador de salud publica en Chile es el tramo 50 a 69 anos.
+2. Denominador: se utiliza la poblacion inscrita y validada por FONASA en el establecimiento o comuna. El grupo prioritario para el indicador de salud publica en Chile es el tramo 50 a 69 anos.
 
 El REM-A29 aporta informacion sobre capacidad diagnostica y flujo de pacientes, pero no se utiliza para el calculo oficial de la tasa de cobertura.
 

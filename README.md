@@ -4,7 +4,7 @@ Documentacion operativa para preparar la data 2025 de cobertura de mamografia re
 
 ## Objetivo
 
-Calcular la cobertura de mamografia vigente en mujeres de 50 a 69 anos de la Region Metropolitana para el ano 2025, usando REM-P12 como numerador y Poblacion Inscrita Validada (PIV) FONASA como denominador.
+Calcular la cobertura de mamografia vigente en mujeres de 50 a 69 anos de la Region Metropolitana para el ano 2025, usando REM-P12 como numerador y poblacion inscrita y validada FONASA como denominador.
 
 El calculo trabaja solo con el corte de diciembre: `Mes = 12` del REM-P 2025.
 
@@ -17,7 +17,7 @@ raiz del repositorio `REM-Mamografias`.
 Programas en la raiz de la carpeta:
 
 1. `01_extraer_numerador_p12.py`
-2. `02_calcular_denominador_piv.py`
+2. `02_calcular_denominador_poblacion_inscrita_validada.py`
 3. `03_calcular_cobertura_mamografia.py`
 
 Carpeta `output` con el calculo y resultados:
@@ -30,7 +30,7 @@ Archivos principales:
 - `visualizacion_paralela_mamografia_dic_2025.xlsx`: libro para revision visual, con comuna principal, establecimiento/control, control de calidad y metodologia.
 - `cobertura_mamografia_establecimiento_rm_2025.csv`: cobertura por establecimiento.
 - `cobertura_mamografia_comuna_rm_2025.csv`: cobertura por comuna.
-- `denominador_piv_mujeres_50_69_rm_base_pago_2025.csv`: PIV mujeres 50-69.
+- `denominador_poblacion_inscrita_validada_mujeres_50_69_rm_base_pago_2025.csv`: poblacion inscrita y validada mujeres 50-69.
 - `numerador_p12_b1_mamografia_rm_2025.csv`: extraccion larga desde REM-P12 B1.
 - `numerador_p12_b1_mamografia_rm_2025_resumen_establecimiento.csv`: numerador agregado por establecimiento y tramo de edad.
 - `control_calidad_mamografia_rm_2025.csv`: registros que requieren revision.
@@ -56,7 +56,7 @@ streamlit run .\streamlit_dashboard.py
 
 La pagina inicial muestra primero la tabla de cobertura por comuna, seguida de indicadores regionales y un grafico territorial. La pagina `Detalle comunal` permite seleccionar una comuna y revisar la tabla de establecimientos. La pagina `Control y metodologia` muestra la metodologia del calculo en formato de texto.
 
-Criterio comunal aplicado: los establecimientos con numerador REM-P12 se suman al numerador de su comuna. Si un establecimiento no tiene PIV directa, queda en control solo para la cobertura establecimiento; no se excluye de la cobertura comunal.
+Criterio comunal aplicado: los establecimientos con numerador REM-P12 se suman al numerador de su comuna. Si un establecimiento no tiene poblacion inscrita y validada directa, queda en control solo para la cobertura establecimiento; no se excluye de la cobertura comunal.
 
 ## Orden de ejecucion
 
@@ -64,7 +64,7 @@ Desde PowerShell:
 
 ```powershell
 python .\01_extraer_numerador_p12.py
-python .\02_calcular_denominador_piv.py
+python .\02_calcular_denominador_poblacion_inscrita_validada.py
 python .\03_calcular_cobertura_mamografia.py
 ```
 
@@ -83,13 +83,13 @@ Salidas:
 
 ### Programa 2: denominador
 
-`02_calcular_denominador_piv.py`
+`02_calcular_denominador_poblacion_inscrita_validada.py`
 
-Lee la PIV FONASA base pago 2025, filtra mujeres de 50 a 69 anos, aplica el alias `311001 -> 201674` y calcula el denominador por establecimiento.
+Lee la poblacion inscrita y validada FONASA base pago 2025, filtra mujeres de 50 a 69 anos, aplica el alias `311001 -> 201674` y calcula el denominador por establecimiento.
 
 Salida:
 
-- `output\denominador_piv_mujeres_50_69_rm_base_pago_2025.csv`
+- `output\denominador_poblacion_inscrita_validada_mujeres_50_69_rm_base_pago_2025.csv`
 
 ### Programa 3: cobertura
 
@@ -113,7 +113,7 @@ Formula:
 ```text
 Cobertura (%) =
   Mujeres de 50 a 69 anos con mamografia vigente
-  / Poblacion Inscrita Validada (PIV) de mujeres de 50 a 69 anos
+  / poblacion inscrita y validada de mujeres de 50 a 69 anos
   * 100
 ```
 
@@ -146,7 +146,7 @@ El numerador suma los cuatro tramos anteriores.
 
 Fuente local:
 
-Archivo PIV FONASA base pago 2025. El script lo busca por defecto en `data/T8009_Inscritos_RM.xlsx`; tambien se puede indicar otra ubicacion con la variable de entorno `PIV_MAMOGRAFIA_PATH`.
+Archivo de poblacion inscrita y validada FONASA base pago 2025. El script lo busca por defecto en `data/T8009_Inscritos_RM.xlsx`; tambien se puede indicar otra ubicacion con la variable de entorno `POBLACION_INSCRITA_VALIDADA_PATH`.
 
 El maestro de establecimientos se busca por defecto en `data/establecimientos_20260406_oficial.csv`; tambien se puede indicar otra ubicacion con la variable de entorno `MAESTRO_ESTABLECIMIENTOS_PATH`.
 
@@ -161,9 +161,9 @@ Definicion aplicada:
 
 ### Ajuste aplicado
 
-Se detecto un alias de codigo entre PIV y REM/DEIS:
+Se detecto un alias de codigo entre la poblacion inscrita y validada y REM/DEIS:
 
-| Codigo PIV original | Codigo REM/DEIS usado | Establecimiento |
+| Codigo poblacion inscrita y validada original | Codigo REM/DEIS usado | Establecimiento |
 | --- | --- | --- |
 | `311001` | `201674` | CESFAM El Abrazo Dr. Salvador Allende |
 
@@ -176,18 +176,18 @@ Corte diciembre 2025, Region Metropolitana:
 | Indicador | Valor |
 | --- | ---: |
 | Numerador mujeres 50-69 con mamografia vigente | 236.840 |
-| Denominador PIV mujeres 50-69 | 751.298 |
+| Denominador poblacion inscrita y validada mujeres 50-69 | 751.298 |
 | Cobertura regional | 31,52% |
 
 ## Nota sobre cobertura por establecimiento
 
-La cobertura por establecimiento se calcula y se mantiene tal como resulta de la formula. Algunas coberturas pueden superar 100%, especialmente en establecimientos con denominador PIV directo pequeno. Esos casos no se consideran error por si solos.
+La cobertura por establecimiento se calcula y se mantiene tal como resulta de la formula. Algunas coberturas pueden superar 100%, especialmente en establecimientos con denominador de poblacion inscrita y validada directo pequeno. Esos casos no se consideran error por si solos.
 
 Para reporte territorial, la salida comunal sigue siendo la mas estable porque numerador y denominador quedan agregados al mismo nivel.
 
 El archivo `control_calidad_mamografia_rm_2025.csv` lista solo casos incompletos:
 
-- establecimientos con numerador REM-P12 sin PIV directa.
+- establecimientos con numerador REM-P12 sin poblacion inscrita y validada directa.
 
 ## Por que REM-P12 y no REM-A29
 
@@ -197,21 +197,21 @@ El REM-P12 registra personas con tamizaje vigente. Para cobertura interesa saber
 
 ## Pendientes
 
-- Validar con Angelica que la PIV usada (`T8009_Inscritos_RM.xlsx`) corresponde oficialmente al denominador requerido para 2025.
+- Validar con Angelica que la poblacion inscrita y validada usada (`T8009_Inscritos_RM.xlsx`) corresponde oficialmente al denominador requerido para 2025.
 - Confirmar si el indicador debe reportarse solo con corte diciembre o si tambien se requiere corte junio por tratarse de REM semestral.
-- Revisar los 5 establecimientos con numerador REM-P12 sin PIV directa:
+- Revisar los 5 establecimientos con numerador REM-P12 sin poblacion inscrita y validada directa:
   - `201353`: CECOSF Union y Esfuerzo Rural, Pudahuel.
   - `110720`: CECOSF Catamarca, Quinta Normal, codigo madre `110320`.
   - `200475`: CECOSF Las Lomas, La Florida, codigo madre `114303`.
   - `201212`: CESFAM Juan Pablo II de Lampa.
   - `109104`: Hospital de Til Til.
-- Definir criterio institucional para establecimientos sin PIV directa:
+- Definir criterio institucional para establecimientos sin poblacion inscrita y validada directa:
   - mantenerlos en control y no calcular cobertura establecimiento;
   - imputar denominador desde establecimiento madre, si corresponde;
   - agregar solo a comuna;
   - o solicitar correccion/confirmacion a FONASA/DEIS.
 - Verificar si la meta IAAPS exige vigencia de 23 meses o si para esta entrega basta con el concepto REM-P12 de "menor o igual a 2 anos".
-- Documentar respuesta de Angelica y reemplazar esta nota si entrega una PIV oficial distinta.
+- Documentar respuesta de Angelica y reemplazar esta nota si entrega una poblacion inscrita y validada oficial distinta.
 
 ## Copia del correo/requerimiento
 
@@ -223,13 +223,13 @@ El REM-P12 registra personas con tamizaje vigente. Para cobertura interesa saber
 >
 > La formula tecnica es:
 >
-> Cobertura (%) = Mujeres de 50 a 69 anos con Mamografia Vigente / Poblacion Inscrita Validada (PIV) de mujeres de 50 a 69 anos * 100.
+> Cobertura (%) = Mujeres de 50 a 69 anos con Mamografia Vigente / poblacion inscrita y validada de mujeres de 50 a 69 anos * 100.
 >
 > Componentes de la formula:
 >
 > 1. Numerador: se extrae de la Serie P12, Seccion B.1. Se considera vigente si el examen se realizo en los ultimos 2 anos, segun estandar ministerial para metas sanitarias, o 3 anos segun periodicidad preventiva general. Para metas de gestion IAAPS suele usarse el corte de 23 meses. Incluye mamografias realizadas en CESFAM, hospitales de la red o clinicas privadas, siempre que el resultado haya sido entregado y registrado en ficha.
 >
-> 2. Denominador: se utiliza la Poblacion Inscrita Validada (PIV) por FONASA en el establecimiento o comuna. El grupo prioritario para el indicador de salud publica en Chile es el tramo 50 a 69 anos.
+> 2. Denominador: se utiliza la poblacion inscrita y validada por FONASA en el establecimiento o comuna. El grupo prioritario para el indicador de salud publica en Chile es el tramo 50 a 69 anos.
 >
 > El REM-A29 aporta informacion sobre capacidad diagnostica y flujo de pacientes, pero no se utiliza para el calculo oficial de la tasa de cobertura.
 >

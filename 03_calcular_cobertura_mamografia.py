@@ -19,7 +19,7 @@ ESTABLECIMIENTOS = Path(
 )
 
 NUMERADOR = OUTPUT / "numerador_p12_b1_mamografia_rm_2025_resumen_establecimiento.csv"
-DENOMINADOR = OUTPUT / "denominador_piv_mujeres_50_69_rm_base_pago_2025.csv"
+DENOMINADOR = OUTPUT / "denominador_poblacion_inscrita_validada_mujeres_50_69_rm_base_pago_2025.csv"
 
 
 def code_text(series: pd.Series) -> pd.Series:
@@ -71,25 +71,25 @@ def add_master_fields(df: pd.DataFrame, estab: pd.DataFrame) -> pd.DataFrame:
 def build_establecimiento(numerador: pd.DataFrame, denom: pd.DataFrame) -> pd.DataFrame:
     denom_cols = [
         "IdEstablecimiento",
-        "servicio_salud_piv",
-        "dependencia_piv",
-        "comuna_piv",
-        "establecimiento_piv",
-        "denominador_piv_mujeres_50_69",
+        "servicio_salud_denominador",
+        "dependencia_denominador",
+        "comuna_denominador",
+        "establecimiento_denominador",
+        "denominador_poblacion_inscrita_validada_mujeres_50_69",
     ]
     out = numerador.merge(denom[denom_cols], on="IdEstablecimiento", how="left")
     out = add_master_fields(out, load_establecimientos())
-    out["denominador_disponible"] = out["denominador_piv_mujeres_50_69"].notna()
+    out["denominador_disponible"] = out["denominador_poblacion_inscrita_validada_mujeres_50_69"].notna()
     out["cobertura_mamografia_pct"] = (
         out["numerador_mujeres_50_69"]
-        / out["denominador_piv_mujeres_50_69"]
+        / out["denominador_poblacion_inscrita_validada_mujeres_50_69"]
         * 100
-    ).where(out["denominador_piv_mujeres_50_69"].gt(0))
+    ).where(out["denominador_poblacion_inscrita_validada_mujeres_50_69"].gt(0))
     out["advertencia_cobertura_establecimiento"] = ""
     out.loc[
         ~out["denominador_disponible"],
         "advertencia_cobertura_establecimiento",
-    ] = "Sin denominador PIV directo; no usar como cobertura establecimiento"
+    ] = "Sin población inscrita y validada directa; no usar como cobertura establecimiento"
     return out.sort_values(["Mes", "IdServicio", "IdComuna", "IdEstablecimiento"])
 
 
@@ -104,7 +104,7 @@ def build_comuna(cob_estab: pd.DataFrame, denom: pd.DataFrame) -> pd.DataFrame:
     denom["IdComuna_master"] = code_text(denom["IdComuna_master"])
     denom_com = (
         denom.dropna(subset=["IdComuna_master"])
-        .groupby("IdComuna_master", as_index=False)["denominador_piv_mujeres_50_69"]
+        .groupby("IdComuna_master", as_index=False)["denominador_poblacion_inscrita_validada_mujeres_50_69"]
         .sum()
         .rename(columns={"IdComuna_master": "IdComuna"})
     )
@@ -119,14 +119,14 @@ def build_comuna(cob_estab: pd.DataFrame, denom: pd.DataFrame) -> pd.DataFrame:
     )
     out["cobertura_mamografia_pct"] = (
         out["numerador_mujeres_50_69"]
-        / out["denominador_piv_mujeres_50_69"]
+        / out["denominador_poblacion_inscrita_validada_mujeres_50_69"]
         * 100
-    ).where(out["denominador_piv_mujeres_50_69"].gt(0))
+    ).where(out["denominador_poblacion_inscrita_validada_mujeres_50_69"].gt(0))
     return out.sort_values(["Mes", "IdComuna"])
 
 
 def build_control(cob_estab: pd.DataFrame) -> pd.DataFrame:
-    sin_piv = cob_estab[~cob_estab["denominador_disponible"]].copy()
+    sin_denominador = cob_estab[~cob_estab["denominador_disponible"]].copy()
 
     controles = []
     cols = [
@@ -136,7 +136,7 @@ def build_control(cob_estab: pd.DataFrame) -> pd.DataFrame:
         "IdComuna",
         "IdEstablecimiento",
         "numerador_mujeres_50_69",
-        "denominador_piv_mujeres_50_69",
+        "denominador_poblacion_inscrita_validada_mujeres_50_69",
         "cobertura_mamografia_pct",
         "codigo_madre_master",
         "servicio_salud_master",
@@ -146,9 +146,9 @@ def build_control(cob_estab: pd.DataFrame) -> pd.DataFrame:
         "estado_funcionamiento_master",
     ]
 
-    if not sin_piv.empty:
-        sin_piv["tipo_control"] = "REM con numerador P12 sin PIV directa"
-        controles.append(sin_piv[cols])
+    if not sin_denominador.empty:
+        sin_denominador["tipo_control"] = "REM con numerador P12 sin población inscrita y validada directa"
+        controles.append(sin_denominador[cols])
 
     if not controles:
         return pd.DataFrame({"tipo_control": ["Sin observaciones"]})
@@ -161,10 +161,10 @@ def metadata_frame() -> pd.DataFrame:
             ("anio", "2025"),
             ("region", "13 - Region Metropolitana"),
             ("numerador", "REM-P12, Seccion B1, Col01, codigos P1220030/P1207030/P1207040/P1207050"),
-            ("denominador", "PIV mujeres 50-69, inscritos 2024, base de pago 2025"),
-            ("alias_piv_aplicado", "311001 -> 201674, Cesfam El Abrazo Dr. Salvador Allende"),
+            ("denominador", "Población inscrita y validada mujeres 50-69, inscritos 2024, base de pago 2025"),
+            ("alias_denominador_aplicado", "311001 -> 201674, Cesfam El Abrazo Dr. Salvador Allende"),
             ("corte_principal", "Mes 12 del REM-P12 2025"),
-            ("formula", "numerador_mujeres_50_69 / denominador_piv_mujeres_50_69 * 100"),
+            ("formula", "numerador_mujeres_50_69 / denominador_poblacion_inscrita_validada_mujeres_50_69 * 100"),
             ("uso_recomendado", "Usar cobertura comunal como salida principal; la cobertura por establecimiento es referencial/control."),
             ("nota", "No se usa REM-A29 porque registra examenes/procedimientos, no personas unicas con vigencia."),
         ],
@@ -217,7 +217,7 @@ def write_visualizacion_excel(
         "IdComuna",
         "comuna_master",
         "numerador_mujeres_50_69",
-        "denominador_piv_mujeres_50_69",
+        "denominador_poblacion_inscrita_validada_mujeres_50_69",
         "cobertura_mamografia_pct",
     ]
     estab_cols = [
@@ -234,7 +234,7 @@ def write_visualizacion_excel(
         "60_64",
         "65_69",
         "numerador_mujeres_50_69",
-        "denominador_piv_mujeres_50_69",
+        "denominador_poblacion_inscrita_validada_mujeres_50_69",
         "cobertura_mamografia_pct",
         "advertencia_cobertura_establecimiento",
     ]
@@ -260,7 +260,7 @@ def main() -> None:
     if not NUMERADOR.exists():
         raise FileNotFoundError(f"Falta numerador. Ejecuta primero: {ROOT / '01_extraer_numerador_p12.py'}")
     if not DENOMINADOR.exists():
-        raise FileNotFoundError(f"Falta denominador. Ejecuta primero: {ROOT / '02_calcular_denominador_piv.py'}")
+        raise FileNotFoundError(f"Falta denominador. Ejecuta primero: {ROOT / '02_calcular_denominador_poblacion_inscrita_validada.py'}")
 
     numerador = pd.read_csv(NUMERADOR, dtype=str)
     denom = pd.read_csv(DENOMINADOR, dtype=str)
@@ -270,8 +270,8 @@ def main() -> None:
     int_cols = ["Ano", "Mes", "IdRegion", "IdServicio", "IdComuna", "50_54", "55_59", "60_64", "65_69", "numerador_mujeres_50_69"]
     for col in int_cols:
         numerador[col] = pd.to_numeric(numerador[col], errors="coerce").astype("int64")
-    denom["denominador_piv_mujeres_50_69"] = pd.to_numeric(
-        denom["denominador_piv_mujeres_50_69"], errors="coerce"
+    denom["denominador_poblacion_inscrita_validada_mujeres_50_69"] = pd.to_numeric(
+        denom["denominador_poblacion_inscrita_validada_mujeres_50_69"], errors="coerce"
     )
 
     cob_estab = build_establecimiento(numerador, denom)
@@ -294,7 +294,7 @@ def main() -> None:
             with pd.ExcelWriter(path, engine="openpyxl") as writer:
                 cob_comuna.to_excel(writer, sheet_name="comuna_dic", index=False)
                 cob_estab.to_excel(writer, sheet_name="establecimiento_control", index=False)
-                denom.to_excel(writer, sheet_name="denominador_piv", index=False)
+                denom.to_excel(writer, sheet_name="denominador", index=False)
                 control.to_excel(writer, sheet_name="control", index=False)
                 meta.to_excel(writer, sheet_name="metodologia", index=False)
             format_excel(path)
@@ -304,7 +304,7 @@ def main() -> None:
             with pd.ExcelWriter(fallback, engine="openpyxl") as writer:
                 cob_comuna.to_excel(writer, sheet_name="comuna_dic", index=False)
                 cob_estab.to_excel(writer, sheet_name="establecimiento_control", index=False)
-                denom.to_excel(writer, sheet_name="denominador_piv", index=False)
+                denom.to_excel(writer, sheet_name="denominador", index=False)
                 control.to_excel(writer, sheet_name="control", index=False)
                 meta.to_excel(writer, sheet_name="metodologia", index=False)
             format_excel(fallback)
@@ -320,7 +320,7 @@ def main() -> None:
     dec = cob_comuna[cob_comuna["Mes"].eq(12)]
     cobertura_rm = (
         dec["numerador_mujeres_50_69"].sum()
-        / dec["denominador_piv_mujeres_50_69"].sum()
+        / dec["denominador_poblacion_inscrita_validada_mujeres_50_69"].sum()
         * 100
     )
     for path in written_paths:
@@ -328,7 +328,7 @@ def main() -> None:
     print(f"Workbook: {workbook_written}")
     print(f"Visualizacion paralela: {visualizacion_written}")
     print(f"Numerador diciembre RM: {dec['numerador_mujeres_50_69'].sum():,}")
-    print(f"Denominador diciembre RM: {dec['denominador_piv_mujeres_50_69'].sum():,.0f}")
+    print(f"Denominador diciembre RM: {dec['denominador_poblacion_inscrita_validada_mujeres_50_69'].sum():,.0f}")
     print(f"Cobertura regional diciembre RM: {cobertura_rm:.2f}%")
 
 

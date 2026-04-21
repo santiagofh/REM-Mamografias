@@ -1,4 +1,4 @@
-﻿Mes,IdServicio,Ano,IdEstablecimiento,CodigoPrestacion,descripcion_prestacion,IdRegion,IdComuna,mujeres_mamografia_vigente,trans_masculino_mamografia_vigente,pueblos_originarios,migrantes,tramo_edad
+Mes,IdServicio,Ano,IdEstablecimiento,CodigoPrestacion,descripcion_prestacion,IdRegion,IdComuna,mujeres_mamografia_vigente,trans_masculino_mamografia_vigente,pueblos_originarios,migrantes,tramo_edad
 12,14,2025,114330,P1220030,Mujeres 50 a 54 anos con mamografia vigente (<= 2 anos),13,13110,288,0,10,6,50_54
 12,14,2025,114330,P1207030,Mujeres 55 a 59 anos con mamografia vigente (<= 2 anos),13,13110,287,0,10,6,55_59
 12,14,2025,114330,P1207040,Mujeres 60 a 64 anos con mamografia vigente (<= 2 anos),13,13110,310,0,5,1,60_64

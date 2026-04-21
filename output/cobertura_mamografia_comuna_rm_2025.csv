@@ -1,4 +1,4 @@
-﻿Ano,Mes,IdRegion,IdComuna,numerador_mujeres_50_69,denominador_piv_mujeres_50_69,comuna_master,cobertura_mamografia_pct
+﻿Ano,Mes,IdRegion,IdComuna,numerador_mujeres_50_69,denominador_poblacion_inscrita_validada_mujeres_50_69,comuna_master,cobertura_mamografia_pct
 2025,12,13,13101,7452,33881,Santiago,21.99462825772557
 2025,12,13,13102,1597,7186,Cerrillos,22.22376843863067
 2025,12,13,13103,3930,15394,Cerro Navia,25.5294270494998
