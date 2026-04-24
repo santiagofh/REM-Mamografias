@@ -9,7 +9,14 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parent
 OUTPUT = ROOT / "output"
 
-SERIE_P = Path(os.environ.get("SERIE_P2025_PATH", ROOT / "data" / "SerieP2025.csv"))
+SERIE_P = Path(
+    os.environ.get(
+        "SERIE_P2025_PATH",
+        Path(
+            r"C:\Users\fariass\OneDrive - SUBSECRETARIA DE SALUD PUBLICA\Escritorio\DATA\REM\REM_2025\Datos\SerieP2025.csv"
+        ),
+    )
+)
 TARGET_MONTH = "12"
 
 P12_B1_CODES = {

@@ -13,6 +13,7 @@ COMMUNE_PATH = OUTPUT_DIR / "cobertura_mamografia_comuna_rm_2025.csv"
 ESTABLISHMENT_PATH = OUTPUT_DIR / "cobertura_mamografia_establecimiento_rm_2025.csv"
 CONTROL_PATH = OUTPUT_DIR / "control_calidad_mamografia_rm_2025.csv"
 METADATA_PATH = OUTPUT_DIR / "metadata_mamografia_rm_2025.csv"
+MANUAL_REM_PDF_URL = "https://repositoriodeis.minsal.cl/ContenidoSitioWeb2020/REM/2025/SERIE/MANUAL_REM_P_2025_Version_1.2.pdf"
 
 ACCENT_REPLACEMENTS = str.maketrans(
     {
@@ -583,6 +584,13 @@ def render_quality_page() -> None:
         )
 
     render_metadata_markdown(metadata)
+
+    st.markdown("### Documento de referencia")
+    st.link_button(
+        "Descargar manual REM-P 2025 (PDF)",
+        MANUAL_REM_PDF_URL,
+        use_container_width=False,
+    )
 
     metadata_excel = dataframe_to_excel_bytes(
         metadata,

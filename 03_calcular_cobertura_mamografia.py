@@ -14,7 +14,9 @@ OUTPUT = ROOT / "output"
 ESTABLECIMIENTOS = Path(
     os.environ.get(
         "MAESTRO_ESTABLECIMIENTOS_PATH",
-        ROOT / "data" / "establecimientos_20260406_oficial.csv",
+        Path(
+            r"C:\Users\fariass\OneDrive - SUBSECRETARIA DE SALUD PUBLICA\Escritorio\DATA\ESTABLECIMIENTOS\establecimientos_20260424.csv"
+        ),
     )
 )
 
