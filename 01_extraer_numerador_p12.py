@@ -13,7 +13,7 @@ SERIE_P = Path(
     os.environ.get(
         "SERIE_P2025_PATH",
         Path(
-            r"C:\Users\fariass\OneDrive - SUBSECRETARIA DE SALUD PUBLICA\Escritorio\DATA\REM\REM_2025\Datos\SerieP2025.csv"
+            r"D:\DATA\REM\REM_2025\Datos\SerieP2025.csv"
         ),
     )
 )
@@ -57,7 +57,7 @@ def main() -> None:
     df = pd.read_csv(SERIE_P, sep=";", dtype=str, usecols=usecols)
     df = df[
         (df["IdRegion"] == "13")
-        & (df["Mes"] == TARGET_MONTH)
+        # & (df["Mes"] == TARGET_MONTH)
         & (df["CodigoPrestacion"].isin(P12_B1_CODES))
     ].copy()
 
@@ -111,8 +111,8 @@ def main() -> None:
     resumen["numerador_mujeres_50_69"] = resumen[age_cols].sum(axis=1)
     resumen = resumen[index_cols + age_cols + ["numerador_mujeres_50_69"]]
 
-    largo_path = OUTPUT / "numerador_p12_b1_mamografia_rm_2025.csv"
-    resumen_path = OUTPUT / "numerador_p12_b1_mamografia_rm_2025_resumen_establecimiento.csv"
+    largo_path = OUTPUT / "numerador_p12_b1_mamografia_rm_2025_MES_12_06.csv"
+    resumen_path = OUTPUT / "numerador_p12_b1_mamografia_rm_2025_resumen_establecimiento_MES_12_06.csv"
     df.to_csv(largo_path, index=False, encoding="utf-8-sig")
     resumen.to_csv(resumen_path, index=False, encoding="utf-8-sig")
 
