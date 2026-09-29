@@ -21,7 +21,7 @@ ESTABLECIMIENTOS = Path(
     os.environ.get(
         "MAESTRO_ESTABLECIMIENTOS_PATH",
         Path(
-            r"C:\Users\fariass\OneDrive - SUBSECRETARIA DE SALUD PUBLICA\Escritorio\DATA\ESTABLECIMIENTOS\establecimientos_20260424.csv"
+            r"D:\DATA\ESTABLECIMIENTOS\establecimientos_20260730.csv"
         ),
     )
 )

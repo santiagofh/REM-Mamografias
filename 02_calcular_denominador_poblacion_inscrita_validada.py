@@ -13,7 +13,7 @@ POBLACION_INSCRITA_VALIDADA = Path(
     os.environ.get(
         "POBLACION_INSCRITA_VALIDADA_PATH",
         Path(
-            r"C:\Users\fariass\OneDrive - SUBSECRETARIA DE SALUD PUBLICA\Escritorio\DATA\FONASA\Poblacion fonasa inscrita x comuna\INSCRITOS\Datos FONASA\Inscritos 2024 (Base pago 2025)\T8009_Inscritos_RM.xlsx"
+            r"D:\DATA\FONASA\Poblacion fonasa inscrita x comuna\INSCRITOS\Datos FONASA\Inscritos 2024 (Base pago 2025)\T8009_Inscritos_RM.xlsx"
         ),
     )
 )
@@ -21,7 +21,7 @@ ESTABLECIMIENTOS = Path(
     os.environ.get(
         "MAESTRO_ESTABLECIMIENTOS_PATH",
         Path(
-            r"C:\Users\fariass\OneDrive - SUBSECRETARIA DE SALUD PUBLICA\Escritorio\DATA\ESTABLECIMIENTOS\establecimientos_20260424.csv"
+            r"D:\DATA\ESTABLECIMIENTOS\establecimientos_20260730.csv"
         ),
     )
 )
